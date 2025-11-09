@@ -1,0 +1,57 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE Files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.sublime-*
+*.swp
+*.swo
+*.sw?
+
+# Visual Studio/Windows Development
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs
+*.log
+logs/
+
+# Build Output
+dist/
+build/
+bin/
+
+# Go Build Artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+
+# Test Coverage
+coverage/
+coverage.txt
+coverage.html
+coverage.out
+*.lcov
+testdata/
+
+# Dependencies
+vendor/
+
+# Temporary/Working Files
+tmp/
