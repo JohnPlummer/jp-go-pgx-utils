@@ -218,10 +218,7 @@ func (c *Connection) Close() {
 // Returns error if pool uninitialized or SELECT 1 fails.
 func (c *Connection) Health(ctx context.Context) error {
 	if c.pool == nil {
-		return errors.NewProcessingError(
-			"database pool not initialized",
-			"health_check",
-		)
+		return errors.New("database pool not initialized")
 	}
 
 	// Use configured health timeout
@@ -231,18 +228,11 @@ func (c *Connection) Health(ctx context.Context) error {
 	var result int
 	err := c.pool.QueryRow(healthCtx, "SELECT 1").Scan(&result)
 	if err != nil {
-		return errors.NewNetworkError(
-			"health check failed",
-			"database_health",
-			errors.WithCause(err),
-		)
+		return fmt.Errorf("health check failed: %w", err)
 	}
 
 	if result != 1 {
-		return errors.NewProcessingError(
-			"unexpected health check result",
-			"health_check",
-		)
+		return errors.New("unexpected health check result")
 	}
 
 	return nil
@@ -266,39 +256,17 @@ func (c *Connection) Pool() *pgxpool.Pool {
 // Exec executes queries without result rows (INSERT, UPDATE, DELETE).
 func (c *Connection) Exec(ctx context.Context, sql string, args ...interface{}) (pgconn.CommandTag, error) {
 	if c.pool == nil {
-		return pgconn.CommandTag{}, errors.NewProcessingError(
-			"database pool not initialized",
-			"query_exec",
-		)
+		return pgconn.CommandTag{}, errors.New("database pool not initialized")
 	}
-	tag, err := c.pool.Exec(ctx, sql, args...)
-	if err != nil {
-		return tag, errors.NewProcessingError(
-			"failed to execute query",
-			"query_exec",
-			errors.WithCause(err),
-		)
-	}
-	return tag, nil
+	return c.pool.Exec(ctx, sql, args...)
 }
 
 // Query executes queries returning multiple rows.
 func (c *Connection) Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error) {
 	if c.pool == nil {
-		return nil, errors.NewProcessingError(
-			"database pool not initialized",
-			"query",
-		)
+		return nil, errors.New("database pool not initialized")
 	}
-	rows, err := c.pool.Query(ctx, sql, args...)
-	if err != nil {
-		return nil, errors.NewProcessingError(
-			"failed to execute query",
-			"query",
-			errors.WithCause(err),
-		)
-	}
-	return rows, nil
+	return c.pool.Query(ctx, sql, args...)
 }
 
 // QueryRow executes queries expecting single row.
@@ -306,12 +274,7 @@ func (c *Connection) Query(ctx context.Context, sql string, args ...interface{})
 // Returns emptyRow with error if pool uninitialized.
 func (c *Connection) QueryRow(ctx context.Context, sql string, args ...interface{}) pgx.Row {
 	if c.pool == nil {
-		return &emptyRow{
-			err: errors.NewProcessingError(
-				"database pool not initialized",
-				"query_row",
-			),
-		}
+		return &emptyRow{err: errors.New("database pool not initialized")}
 	}
 	return c.pool.QueryRow(ctx, sql, args...)
 }
@@ -319,39 +282,17 @@ func (c *Connection) QueryRow(ctx context.Context, sql string, args ...interface
 // Begin starts a transaction with default isolation level.
 func (c *Connection) Begin(ctx context.Context) (pgx.Tx, error) {
 	if c.pool == nil {
-		return nil, errors.NewProcessingError(
-			"database pool not initialized",
-			"begin_transaction",
-		)
+		return nil, errors.New("database pool not initialized")
 	}
-	tx, err := c.pool.Begin(ctx)
-	if err != nil {
-		return nil, errors.NewProcessingError(
-			"failed to begin transaction",
-			"begin_transaction",
-			errors.WithCause(err),
-		)
-	}
-	return tx, nil
+	return c.pool.Begin(ctx)
 }
 
 // BeginTx starts a transaction with custom isolation and access mode.
 func (c *Connection) BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error) {
 	if c.pool == nil {
-		return nil, errors.NewProcessingError(
-			"database pool not initialized",
-			"begin_transaction",
-		)
+		return nil, errors.New("database pool not initialized")
 	}
-	tx, err := c.pool.BeginTx(ctx, txOptions)
-	if err != nil {
-		return nil, errors.NewProcessingError(
-			"failed to begin transaction",
-			"begin_transaction",
-			errors.WithCause(err),
-		)
-	}
-	return tx, nil
+	return c.pool.BeginTx(ctx, txOptions)
 }
 
 // emptyRow implements pgx.Row for uninitialized pool errors.
