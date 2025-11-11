@@ -23,10 +23,6 @@ type Connection struct {
 	opts   connectionOptions
 }
 
-// DB is an alias for Connection to maintain backward compatibility.
-// Deprecated: Use Connection instead.
-type DB = Connection
-
 // connectionOptions holds optional configuration for Connection.
 type connectionOptions struct {
 	healthTimeout time.Duration
@@ -98,13 +94,6 @@ func NewConnection(cfg *config.DatabaseConfig, opts ...Option) (*Connection, err
 		logger: logger,
 		opts:   connOpts,
 	}, nil
-}
-
-// NewDB creates a new DB instance (Connection alias) without establishing connections.
-// This is a compatibility wrapper that calls NewConnection with default options.
-// Deprecated: Use NewConnection instead for more flexible configuration.
-func NewDB(cfg *config.DatabaseConfig) (*DB, error) {
-	return NewConnection(cfg)
 }
 
 // Connect establishes the connection pool with exponential backoff retry.
