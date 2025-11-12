@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/JohnPlummer/go-config"
+	"github.com/JohnPlummer/jp-go-config"
 	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -47,7 +47,7 @@ func setupTestContainer(t *testing.T) (*postgres.PostgresContainer, *config.Data
 	cfg := &config.DatabaseConfig{
 		Host:     host,
 		Port:     port.Int(),
-		Name:     "testdb",
+		Database: "testdb",
 		User:     "testuser",
 		Password: "testpass",
 		SSLMode:  "disable",
@@ -389,16 +389,17 @@ func TestIntegration_WithTransaction_Rollback(t *testing.T) {
 func TestIntegration_Connection_RetryOnFailure(t *testing.T) {
 	// Test with invalid host that will retry
 	cfg := &config.DatabaseConfig{
-		Host:         "invalid-host-that-does-not-exist",
-		Port:         5432,
-		Name:         "testdb",
-		User:         "testuser",
-		Password:     "testpass",
-		SSLMode:      "disable",
-		RetryTimeout: 2 * time.Second,
+		Host:     "invalid-host-that-does-not-exist",
+		Port:     5432,
+		Database: "testdb",
+		User:     "testuser",
+		Password: "testpass",
+		SSLMode:  "disable",
+		MaxConns: 10,
+		MinConns: 2,
 	}
 
-	conn, err := NewConnection(cfg)
+	conn, err := NewConnection(cfg, WithRetryTimeout(5*time.Second))
 	require.NoError(t, err)
 
 	ctx := context.Background()
@@ -407,9 +408,9 @@ func TestIntegration_Connection_RetryOnFailure(t *testing.T) {
 	duration := time.Since(startTime)
 
 	require.Error(t, err)
-	// Should retry for approximately the retry timeout
-	assert.GreaterOrEqual(t, duration, 2*time.Second)
-	assert.LessOrEqual(t, duration, 5*time.Second) // Allow some overhead
+	// Should retry for approximately the retry timeout (at least 3s with exponential backoff)
+	assert.GreaterOrEqual(t, duration, 3*time.Second)
+	assert.LessOrEqual(t, duration, 7*time.Second) // Allow some overhead
 }
 
 func TestIntegration_Connection_CustomHealthTimeout(t *testing.T) {

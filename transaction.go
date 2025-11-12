@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/JohnPlummer/go-errors"
+	errors "github.com/JohnPlummer/jp-go-errors"
 	"github.com/jackc/pgx/v5"
 )
 

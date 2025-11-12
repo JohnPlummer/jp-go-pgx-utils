@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/JohnPlummer/go-config"
-	"github.com/JohnPlummer/go-errors"
+	config "github.com/JohnPlummer/jp-go-config"
+	errors "github.com/JohnPlummer/jp-go-errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

@@ -7,8 +7,8 @@ import (
 	"math"
 	"time"
 
-	"github.com/JohnPlummer/go-config"
-	"github.com/JohnPlummer/go-errors"
+	config "github.com/JohnPlummer/jp-go-config"
+	errors "github.com/JohnPlummer/jp-go-errors"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"

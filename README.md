@@ -1,10 +1,10 @@
-# go-pgx-utils
+# jp-go-pgx-utils
 
 Enterprise-grade PostgreSQL connection management for Go applications using pgx/v5.
 
 ## Purpose
 
-`go-pgx-utils` provides robust PostgreSQL connection management with automatic retry logic, health checking, and transaction utilities. Built on top of [pgx/v5](https://github.com/jackc/pgx), this package integrates seamlessly with [go-config](https://github.com/JohnPlummer/go-config) for configuration and [go-errors](https://github.com/JohnPlummer/go-errors) for structured error handling.
+`jp-go-pgx-utils` provides robust PostgreSQL connection management with automatic retry logic, health checking, and transaction utilities. Built on top of [pgx/v5](https://github.com/jackc/pgx), this package integrates seamlessly with [jp-go-config](https://github.com/JohnPlummer/jp-go-config) for configuration and [jp-go-errors](https://github.com/JohnPlummer/jp-go-errors) for structured error handling.
 
 ## Features
 
@@ -19,15 +19,15 @@ Enterprise-grade PostgreSQL connection management for Go applications using pgx/
 ## Installation
 
 ```bash
-go get github.com/JohnPlummer/go-pgx-utils@v1.0.0
+go get github.com/JohnPlummer/jp-go-pgx-utils@v1.0.0
 ```
 
 ## Dependencies
 
 This package requires:
 
-- [github.com/JohnPlummer/go-config](https://github.com/JohnPlummer/go-config) v1.0.0 - Configuration management
-- [github.com/JohnPlummer/go-errors](https://github.com/JohnPlummer/go-errors) v1.0.0 - Error handling
+- [github.com/JohnPlummer/jp-go-config](https://github.com/JohnPlummer/jp-go-config) v1.0.0 - Configuration management
+- [github.com/JohnPlummer/jp-go-errors](https://github.com/JohnPlummer/jp-go-errors) v1.0.0 - Error handling
 - [github.com/jackc/pgx/v5](https://github.com/jackc/pgx) - PostgreSQL driver
 
 ## Quick Start
@@ -40,8 +40,8 @@ import (
     "log"
     "time"
 
-    "github.com/JohnPlummer/go-config"
-    pgxutils "github.com/JohnPlummer/go-pgx-utils"
+    "github.com/JohnPlummer/jp-go-config"
+    pgxutils "github.com/JohnPlummer/jp-go-pgx-utils"
 )
 
 func main() {
@@ -263,10 +263,10 @@ err := pgxutils.WithTransaction(ctx, conn, logger, func(tx pgx.Tx) error {
 
 ## Error Handling
 
-All errors use go-errors for structured error handling:
+All errors use jp-go-errors for structured error handling:
 
 ```go
-import "github.com/JohnPlummer/go-errors"
+import "github.com/JohnPlummer/jp-go-errors"
 
 err := conn.Connect(ctx)
 if err != nil {
@@ -354,8 +354,8 @@ db, err := database.NewDB(cfg)
 
 ```go
 import (
-    "github.com/JohnPlummer/go-config"
-    pgxutils "github.com/JohnPlummer/go-pgx-utils"
+    "github.com/JohnPlummer/jp-go-config"
+    pgxutils "github.com/JohnPlummer/jp-go-pgx-utils"
 )
 
 conn, err := pgxutils.NewConnection(cfg.Database)
@@ -366,8 +366,8 @@ conn, err := pgxutils.NewConnection(cfg.Database)
 1. **Package name**: `database` → `pgxutils`
 2. **Type name**: `DB` → `Connection`
 3. **Constructor**: `NewDB(cfg)` → `NewConnection(cfg.Database)`
-4. **Config**: Custom config → `config.DatabaseConfig` from go-config
-5. **Errors**: Standard errors → go-errors integration
+4. **Config**: Custom config → `config.DatabaseConfig` from jp-go-config
+5. **Errors**: Standard errors → jp-go-errors integration
 
 ## Testing
 
@@ -396,8 +396,8 @@ This package maintains >80% test coverage.
 
 ## Best Practices
 
-1. **Use go-config for configuration**: Load `DatabaseConfig` via go-config
-2. **Check errors with go-errors**: Use `errors.Is()` for error type checking
+1. **Use jp-go-config for configuration**: Load `DatabaseConfig` via jp-go-config
+2. **Check errors with jp-go-errors**: Use `errors.Is()` for error type checking
 3. **Use WithTransaction for complex transactions**: Automatic rollback on error
 4. **Set appropriate connection pool sizes**: Match your workload characteristics
 5. **Monitor pool statistics**: Use `Stats()` for observability
@@ -442,11 +442,11 @@ Contributions welcome! Please:
 
 For issues and questions:
 
-- GitHub Issues: <https://github.com/JohnPlummer/go-pgx-utils/issues>
+- GitHub Issues: <https://github.com/JohnPlummer/jp-go-pgx-utils/issues>
 - Documentation: This README and inline code documentation
 
 ## Related Packages
 
-- [go-config](https://github.com/JohnPlummer/go-config) - Configuration management
-- [go-errors](https://github.com/JohnPlummer/go-errors) - Structured error handling
+- [jp-go-config](https://github.com/JohnPlummer/jp-go-config) - Configuration management
+- [jp-go-errors](https://github.com/JohnPlummer/jp-go-errors) - Structured error handling
 - [pgx](https://github.com/jackc/pgx) - PostgreSQL driver and toolkit
