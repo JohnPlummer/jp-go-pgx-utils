@@ -5,8 +5,8 @@ go 1.24.0
 toolchain go1.24.5
 
 require (
-	github.com/JohnPlummer/jp-go-config v1.0.0
-	github.com/JohnPlummer/jp-go-errors v1.0.0
+	github.com/JohnPlummer/jp-go-config v0.1.0
+	github.com/JohnPlummer/jp-go-errors v0.1.0
 	github.com/golang-migrate/migrate/v4 v4.19.0
 	github.com/jackc/pgx/v5 v5.5.4
 	github.com/stretchr/testify v1.11.1
@@ -97,7 +97,3 @@ require (
 	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace github.com/JohnPlummer/jp-go-config => ../jp-go-config
-
-replace github.com/JohnPlummer/jp-go-errors => ../jp-go-errors
