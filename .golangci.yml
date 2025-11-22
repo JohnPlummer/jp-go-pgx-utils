@@ -35,6 +35,7 @@ linters:
         - G306  # File permissions - test files create temporary files with standard 0o644 permissions
 
   exclusions:
+    # Skip generated files
     paths:
       - ".*\\.pb\\.go$"
       - ".*_gen\\.go$"
