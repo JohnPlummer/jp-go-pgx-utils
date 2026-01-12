@@ -56,7 +56,5 @@ vendor/
 # Temporary/Working Files
 tmp/
 
-# AI Working Files
-.ai/context.md
-.ai/memory.md
-.ai/tasks/
+# AI Backup Files
+.ai-backup/
