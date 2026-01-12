@@ -8,7 +8,7 @@ require (
 	github.com/JohnPlummer/jp-go-config v0.2.0
 	github.com/JohnPlummer/jp-go-errors v1.1.0
 	github.com/golang-migrate/migrate/v4 v4.19.1
-	github.com/jackc/pgx/v5 v5.7.6
+	github.com/jackc/pgx/v5 v5.8.0
 	github.com/stretchr/testify v1.11.1
 	github.com/testcontainers/testcontainers-go v0.40.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.40.0
