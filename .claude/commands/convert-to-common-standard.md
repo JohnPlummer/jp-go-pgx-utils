@@ -59,7 +59,7 @@ Ask user:
 
 1. Do they agree with the classification?
 2. For hybrid elements, should we create generic examples?
-3. Should any project-specific examples move to `.ai/common/examples/`?
+3. Should any project-specific examples move to `~/.claude/standards/examples/`?
 
 ### Step 3: Create Output Files
 
@@ -85,7 +85,7 @@ Based on user agreement, generate:
 
 #### Option D: Create Example File
 
-- Extract complex example code to `.ai/common/examples/[filename]-example.md`
+- Extract complex example code to `~/.claude/standards/examples/[filename]-example.md`
 - Reference from common standard
 
 ### Step 4: Update References
@@ -118,7 +118,7 @@ After moving to common:
 
 ## Examples
 
-[Generic examples or reference to .ai/common/examples/]
+[Generic examples or reference to ~/.claude/standards/examples/]
 
 ## Related Standards
 
@@ -135,7 +135,7 @@ After moving to common:
 ```markdown
 # [Pattern Name] - Project Implementation
 
-*See common standard: `.ai/common/standards/[category]/[filename].md`*
+*See common standard: `~/.claude/standards/[category]/[filename].md`*
 
 ## Project-Specific Details
 
