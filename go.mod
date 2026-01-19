@@ -5,7 +5,7 @@ go 1.24.0
 toolchain go1.24.5
 
 require (
-	github.com/JohnPlummer/jp-go-config v0.2.1
+	github.com/JohnPlummer/jp-go-config v0.3.1
 	github.com/JohnPlummer/jp-go-errors v1.1.1
 	github.com/golang-migrate/migrate/v4 v4.19.1
 	github.com/jackc/pgx/v5 v5.8.0

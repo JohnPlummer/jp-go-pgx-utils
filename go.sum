@@ -4,8 +4,8 @@ github.com/AdaLogics/go-fuzz-headers v0.0.0-20240806141605-e8a1dd7889d6 h1:He8af
 github.com/AdaLogics/go-fuzz-headers v0.0.0-20240806141605-e8a1dd7889d6/go.mod h1:8o94RPi1/7XTJvwPpRSzSUedZrtlirdB3r9Z20bi2f8=
 github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 h1:L/gRVlceqvL25UVaW/CKtUDjefjrs0SPonmDGUVOYP0=
 github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161/go.mod h1:xomTg63KZ2rFqZQzSB4Vz2SUXa1BpHTVz9L5PTmPC4E=
-github.com/JohnPlummer/jp-go-config v0.2.1 h1:Is+i2UEw2YpIflafsZ67pfzFTOXVc5QD526fRyPfyMg=
-github.com/JohnPlummer/jp-go-config v0.2.1/go.mod h1:wYwelIFppegSosKaIPpuu8+U2ojmDkX0RLFW6GfSjQE=
+github.com/JohnPlummer/jp-go-config v0.3.1 h1:tsdUoBRG7MJbsLSqC0yRFDhWBGYW6nd6kGucf3F1N54=
+github.com/JohnPlummer/jp-go-config v0.3.1/go.mod h1:70e05GS+kE8PZayxaG3WVdpRRLpWYBWeJvlQGshk25w=
 github.com/JohnPlummer/jp-go-errors v1.1.1 h1:BsgXq/K04SsI/JwLno/Xj4wBZcnJzlbkKrO8wfknYKc=
 github.com/JohnPlummer/jp-go-errors v1.1.1/go.mod h1:GF3SuAi14wz57TGeQ5lvoHbttD/uokFqmVrzDAlPyjE=
 github.com/Microsoft/go-winio v0.6.2 h1:F2VQgta7ecxGYO8k3ZZz3RS8fVIXVxONVUPlNERoyfY=
