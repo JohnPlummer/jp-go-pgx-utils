@@ -26,11 +26,65 @@ go get github.com/JohnPlummer/jp-go-pgx-utils@v1.0.0
 
 This package requires:
 
-- [github.com/JohnPlummer/jp-go-config](https://github.com/JohnPlummer/jp-go-config) v1.0.0 - Configuration management
-- [github.com/JohnPlummer/jp-go-errors](https://github.com/JohnPlummer/jp-go-errors) v1.0.0 - Error handling
+- [github.com/JohnPlummer/jp-go-config](https://github.com/JohnPlummer/jp-go-config) v0.4.1 - Configuration management with Load() API
+- [github.com/JohnPlummer/jp-go-errors](https://github.com/JohnPlummer/jp-go-errors) v1.1.1 - Error handling
 - [github.com/jackc/pgx/v5](https://github.com/jackc/pgx) - PostgreSQL driver
 
 ## Quick Start
+
+### Using config.Load() (Recommended)
+
+```go
+package main
+
+import (
+    "context"
+    "log"
+
+    "github.com/JohnPlummer/jp-go-config"
+    pgxutils "github.com/JohnPlummer/jp-go-pgx-utils"
+)
+
+func main() {
+    // Load configuration with auto-discovery (.env, config.yaml)
+    cfg, err := config.Load()
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Get validated database configuration
+    dbCfg, err := cfg.Database()
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Create connection
+    conn, err := pgxutils.NewConnection(dbCfg)
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer conn.Close()
+
+    // Connect with automatic retry
+    ctx := context.Background()
+    if err := conn.Connect(ctx); err != nil {
+        log.Fatal(err)
+    }
+
+    // Verify connection health
+    if err := conn.Health(ctx); err != nil {
+        log.Fatal(err)
+    }
+
+    // Execute queries
+    _, err = conn.Exec(ctx, "SELECT 1")
+    if err != nil {
+        log.Fatal(err)
+    }
+}
+```
+
+### Direct Struct Creation (For Tests)
 
 ```go
 package main
@@ -45,7 +99,7 @@ import (
 )
 
 func main() {
-    // Create database configuration
+    // Create database configuration directly (useful for tests)
     cfg := &config.DatabaseConfig{
         Host:            "localhost",
         Port:            5432,
@@ -69,17 +123,6 @@ func main() {
     // Connect with automatic retry
     ctx := context.Background()
     if err := conn.Connect(ctx); err != nil {
-        log.Fatal(err)
-    }
-
-    // Verify connection health
-    if err := conn.Health(ctx); err != nil {
-        log.Fatal(err)
-    }
-
-    // Execute queries
-    _, err = conn.Exec(ctx, "SELECT 1")
-    if err != nil {
         log.Fatal(err)
     }
 }
