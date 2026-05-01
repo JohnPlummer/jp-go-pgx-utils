@@ -3,8 +3,8 @@ module github.com/JohnPlummer/jp-go-pgx-utils
 go 1.25.0
 
 require (
-	github.com/JohnPlummer/jp-go-config v0.5.1
-	github.com/JohnPlummer/jp-go-errors v1.1.2
+	github.com/JohnPlummer/jp-go-config v0.5.2
+	github.com/JohnPlummer/jp-go-errors v1.1.3
 	github.com/golang-migrate/migrate/v4 v4.19.1
 	github.com/jackc/pgx/v5 v5.9.2
 	github.com/stretchr/testify v1.11.1
