@@ -50,12 +50,14 @@ func HandleTransactionRollback(ctx context.Context, tx TransactionRollback, logg
 		if strings.Contains(errMsg, "tx is closed") ||
 			errors.Is(rbErr, context.Canceled) ||
 			strings.Contains(errMsg, "conn busy") {
-			logger.Warn("transaction rollback skipped (expected condition)",
+			logger.Warn(
+				"transaction rollback skipped (expected condition)",
 				"error", rbErr,
 			)
 		} else {
 			// Unexpected rollback failure: log as error
-			logger.Error("failed to rollback transaction",
+			logger.Error(
+				"failed to rollback transaction",
 				"error", rbErr,
 			)
 		}

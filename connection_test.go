@@ -345,7 +345,8 @@ func TestConnectionOptions_CustomTimeouts(t *testing.T) {
 	healthTimeout := 15 * time.Second
 	retryTimeout := 45 * time.Second
 
-	conn, err := NewConnection(cfg,
+	conn, err := NewConnection(
+		cfg,
 		WithHealthTimeout(healthTimeout),
 		WithRetryTimeout(retryTimeout),
 	)
@@ -368,7 +369,8 @@ func TestConnectionOptions_MultipleOptions(t *testing.T) {
 	logger := slog.Default()
 	healthTimeout := 15 * time.Second
 
-	conn, err := NewConnection(cfg,
+	conn, err := NewConnection(
+		cfg,
 		WithLogger(logger),
 		WithHealthTimeout(healthTimeout),
 	)

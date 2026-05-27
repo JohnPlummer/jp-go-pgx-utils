@@ -20,7 +20,8 @@ import (
 func setupTestContainer(t *testing.T) (*postgres.PostgresContainer, *config.DatabaseConfig) {
 	ctx := context.Background()
 
-	postgresContainer, err := postgres.Run(ctx,
+	postgresContainer, err := postgres.Run(
+		ctx,
 		"postgres:16-alpine",
 		postgres.WithDatabase("testdb"),
 		postgres.WithUsername("testuser"),
@@ -28,7 +29,8 @@ func setupTestContainer(t *testing.T) (*postgres.PostgresContainer, *config.Data
 		testcontainers.WithWaitStrategy(
 			wait.ForLog("database system is ready to accept connections").
 				WithOccurrence(2).
-				WithStartupTimeout(60*time.Second)),
+				WithStartupTimeout(60*time.Second),
+		),
 	)
 	require.NoError(t, err)
 
@@ -46,7 +48,7 @@ func setupTestContainer(t *testing.T) (*postgres.PostgresContainer, *config.Data
 
 	cfg := &config.DatabaseConfig{
 		Host:     host,
-		Port:     port.Int(),
+		Port:     int(port.Num()),
 		Database: "testdb",
 		User:     "testuser",
 		Password: "testpass",

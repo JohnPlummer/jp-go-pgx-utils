@@ -102,7 +102,8 @@ func NewConnection(cfg *config.DatabaseConfig, opts ...Option) (*Connection, err
 // Returns error if connection cannot be established within timeout.
 func (c *Connection) Connect(ctx context.Context) error {
 	// Build connection URL
-	connStr := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s",
+	connStr := fmt.Sprintf(
+		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
 		c.cfg.User,
 		c.cfg.Password,
 		c.cfg.Host,
@@ -156,7 +157,8 @@ func (c *Connection) Connect(ctx context.Context) error {
 			pingErr := pool.Ping(ctx)
 			if pingErr == nil {
 				c.pool = pool
-				c.logger.Info("database connection established",
+				c.logger.Info(
+					"database connection established",
 					"host", c.cfg.Host,
 					"port", c.cfg.Port,
 					"database", c.cfg.Database,
@@ -169,7 +171,8 @@ func (c *Connection) Connect(ctx context.Context) error {
 			err = pingErr
 		}
 
-		c.logger.Warn("connection attempt failed",
+		c.logger.Warn(
+			"connection attempt failed",
 			"attempt", attempt,
 			"error", err,
 		)
