@@ -96,12 +96,22 @@ func NewConnection(cfg *config.DatabaseConfig, opts ...Option) (*Connection, err
 	}, nil
 }
 
-// Connect establishes the connection pool with exponential backoff retry.
+// buildPoolConfig turns the DatabaseConfig into a pgxpool config.
 //
-// Retries for up to RetryTimeout (default 30s) with max 10s between attempts.
-// Returns error if connection cannot be established within timeout.
-func (c *Connection) Connect(ctx context.Context) error {
-	// Build connection URL
+// Each pool field is applied only when the caller actually set it. A zero value
+// means "not configured", so pgxpool's own default from ParseConfig stands
+// rather than being overwritten with the zero.
+//
+// This matters because pgxpool's zero values are not benign. A zero
+// MaxConnLifetime expires every connection the instant it is created, which
+// from pgx v5.10.0 is fatal: pgxpool enforces expiry at acquire time, so every
+// acquire destroys the connection and retries until the pool gives up. A zero
+// MaxConns is rejected outright by puddle ("MaxSize must be >= 1").
+//
+// Callers that build a DatabaseConfig by hand rather than through jp-go-config's
+// viper loading never get that loader's defaults, so they would otherwise reach
+// pgxpool with zeros.
+func (c *Connection) buildPoolConfig() (*pgxpool.Config, error) {
 	connStr := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
 		c.cfg.User,
@@ -112,10 +122,9 @@ func (c *Connection) Connect(ctx context.Context) error {
 		c.cfg.SSLMode,
 	)
 
-	// Parse the configuration
 	poolConfig, err := pgxpool.ParseConfig(connStr)
 	if err != nil {
-		return errors.NewValidationError(
+		return nil, errors.NewValidationError(
 			"failed to parse database URL",
 			"database_url",
 			errors.WithCause(err),
@@ -124,24 +133,46 @@ func (c *Connection) Connect(ctx context.Context) error {
 
 	// Bounds checking prevents int32 overflow from config values
 	if c.cfg.MaxConns < 0 || c.cfg.MaxConns > math.MaxInt32 {
-		return errors.NewValidationError(
+		return nil, errors.NewValidationError(
 			fmt.Sprintf("MaxConns out of range for int32: %d", c.cfg.MaxConns),
 			"max_conns",
 		)
 	}
 	if c.cfg.MinConns < 0 || c.cfg.MinConns > math.MaxInt32 {
-		return errors.NewValidationError(
+		return nil, errors.NewValidationError(
 			fmt.Sprintf("MinConns out of range for int32: %d", c.cfg.MinConns),
 			"min_conns",
 		)
 	}
-	poolConfig.MaxConns = int32(c.cfg.MaxConns) // #nosec G115 - bounds already checked above
-	poolConfig.MinConns = int32(c.cfg.MinConns) // #nosec G115 - bounds already checked above
-	poolConfig.MaxConnLifetime = c.cfg.ConnMaxLifetime
-	poolConfig.MaxConnIdleTime = c.cfg.ConnMaxIdleTime
+
+	if c.cfg.MaxConns > 0 {
+		poolConfig.MaxConns = int32(c.cfg.MaxConns) // #nosec G115 - bounds already checked above
+	}
+	if c.cfg.MinConns > 0 {
+		poolConfig.MinConns = int32(c.cfg.MinConns) // #nosec G115 - bounds already checked above
+	}
+	if c.cfg.ConnMaxLifetime > 0 {
+		poolConfig.MaxConnLifetime = c.cfg.ConnMaxLifetime
+	}
+	if c.cfg.ConnMaxIdleTime > 0 {
+		poolConfig.MaxConnIdleTime = c.cfg.ConnMaxIdleTime
+	}
 
 	// Health check runs every 30s to detect stale connections
 	poolConfig.HealthCheckPeriod = 30 * time.Second
+
+	return poolConfig, nil
+}
+
+// Connect establishes the connection pool with exponential backoff retry.
+//
+// Retries for up to RetryTimeout (default 30s) with max 10s between attempts.
+// Returns error if connection cannot be established within timeout.
+func (c *Connection) Connect(ctx context.Context) error {
+	poolConfig, err := c.buildPoolConfig()
+	if err != nil {
+		return err
+	}
 
 	// Retry with exponential backoff capped at 10s
 	var pool *pgxpool.Pool
